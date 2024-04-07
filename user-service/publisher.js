@@ -1,11 +1,10 @@
 const amqp = require("amqplib");
 
-const user = {
-  id: 1,
-  name: "John Doe",
-};
-
-async function main() {
+/**
+ *
+ * @param { user, type } data
+ */
+async function publishToRabbitMQ(data) {
   conn = await amqp.connect("amqp://localhost");
   ch = await conn.createChannel();
 
@@ -13,23 +12,11 @@ async function main() {
 
   ch.assertExchange(exchange, "topic", { durable: false });
 
-  ch.publish(
-    exchange,
-    "users.created",
-    Buffer.from(JSON.stringify({ user, type: "users.created" }))
-  );
-  ch.publish(
-    exchange,
-    "users.updated",
-    Buffer.from(JSON.stringify({ user, type: "users.updated" }))
-  );
-
-  console.log("Done!");
+  ch.publish(exchange, data.type, Buffer.from(JSON.stringify(data)));
 
   setTimeout(() => {
     conn.close();
-    process.exit(0);
   }, 500);
 }
 
-main().catch(console.error);
+module.exports = publishToRabbitMQ;
