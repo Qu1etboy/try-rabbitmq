@@ -6,14 +6,17 @@ async function main() {
 
   console.log("Notification Service Running");
 
-  const exchange = "users";
+  const userExchange = "users";
+  const reviewExchange = "reviews";
   const queue = "notification_queue";
 
-  ch.assertExchange(exchange, "topic", { durable: false });
+  ch.assertExchange(userExchange, "topic", { durable: false });
+  ch.assertExchange(reviewExchange, "topic", { durable: false });
 
   ch.assertQueue(queue, { exclusive: true });
 
-  ch.bindQueue(queue, exchange, "users.created");
+  ch.bindQueue(queue, userExchange, "users.created");
+  ch.bindQueue(queue, reviewExchange, "reviews.created");
 
   ch.consume(
     queue,
