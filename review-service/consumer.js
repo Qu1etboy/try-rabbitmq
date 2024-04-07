@@ -4,7 +4,7 @@ async function main() {
   conn = await amqp.connect("amqp://localhost");
   ch = await conn.createChannel();
 
-  console.log("Review Service Running");
+  console.log("Review Service Start Consuming");
 
   const exchange = "users";
   const queue = "review_queue";

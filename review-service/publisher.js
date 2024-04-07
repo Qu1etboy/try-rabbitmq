@@ -1,6 +1,6 @@
 const amqp = require("amqplib");
 
-async function main() {
+async function publishToRabbitMQ(data) {
   conn = await amqp.connect("amqp://localhost");
   ch = await conn.createChannel();
 
@@ -8,14 +8,11 @@ async function main() {
 
   ch.assertExchange(exchange, "topic", { durable: false });
 
-  ch.publish(exchange, "reviews.created", Buffer.from("review created"));
-
-  console.log("Done!");
+  ch.publish(exchange, data.type, Buffer.from(JSON.stringify(data)));
 
   setTimeout(() => {
     conn.close();
-    process.exit(0);
   }, 500);
 }
 
-main().catch(console.error);
+module.exports = publishToRabbitMQ;

@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node publisher.js",
+    "dev": "concurrently  \"node consumer.js\" \"nodemon index.js\"",
+    "start": "concurrently  \"node consumer.js\" \"node index.js\"",
     "start:consume": "node consumer.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amqplib": "^0.10.3"
+    "amqplib": "^0.10.3",
+    "concurrently": "^8.2.2",
+    "express": "^4.19.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
