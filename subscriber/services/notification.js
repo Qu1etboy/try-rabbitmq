@@ -13,18 +13,14 @@ async function main() {
   ch.assertExchange(userExchange, "topic", { durable: false });
   ch.assertExchange(reviewExchange, "topic", { durable: false });
 
-  ch.assertQueue(queue, { exclusive: true });
+  ch.assertQueue(queue);
 
   ch.bindQueue(queue, userExchange, "users.created");
   ch.bindQueue(queue, reviewExchange, "reviews.created");
 
-  ch.consume(
-    queue,
-    (msg) => {
-      console.log(" [x] %s", msg.content.toString());
-    },
-    { noAck: true }
-  );
+  ch.consume(queue, (msg) => {
+    console.log(" [x] %s", msg.content.toString());
+  });
 }
 
 main().catch(console.error);

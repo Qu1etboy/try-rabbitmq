@@ -11,17 +11,13 @@ async function main() {
 
   ch.assertExchange(exchange, "topic", { durable: false });
 
-  ch.assertQueue(queue, { exclusive: true });
+  ch.assertQueue(queue);
 
   ch.bindQueue(queue, exchange, "users.*");
 
-  ch.consume(
-    queue,
-    (msg) => {
-      console.log(" [x] %s", msg.content.toString());
-    },
-    { noAck: true }
-  );
+  ch.consume(queue, (msg) => {
+    console.log(" [x] %s", msg.content.toString());
+  });
 }
 
 main().catch(console.error);
