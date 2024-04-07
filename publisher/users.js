@@ -6,13 +6,12 @@ async function main() {
 
   const exchange = "users";
 
-  const msg = process.argv.slice(2).join(" ") || "Hello World!";
+  ch.assertExchange(exchange, "topic", { durable: false });
 
-  ch.assertExchange(exchange, "fanout", { durable: false });
+  ch.publish(exchange, "users.created", Buffer.from("user created"));
+  ch.publish(exchange, "users.updated", Buffer.from("user updated"));
 
-  ch.publish(exchange, "", Buffer.from("msg from users exchange"));
-
-  console.log(" [x] Sent %s", msg);
+  console.log("Done!");
 
   setTimeout(() => {
     conn.close();

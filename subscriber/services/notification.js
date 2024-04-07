@@ -4,15 +4,16 @@ async function main() {
   conn = await amqp.connect("amqp://localhost");
   ch = await conn.createChannel();
 
-  const exchange = "logs";
+  console.log("Notification Service Running");
 
-  const queue = "logs_queue";
+  const exchange = "users";
+  const queue = "notification_queue";
 
-  ch.assertExchange(exchange, "fanout", { durable: false });
+  ch.assertExchange(exchange, "topic", { durable: false });
 
   ch.assertQueue(queue, { exclusive: true });
 
-  ch.bindQueue(queue, exchange, "");
+  ch.bindQueue(queue, exchange, "users.created");
 
   ch.consume(
     queue,
