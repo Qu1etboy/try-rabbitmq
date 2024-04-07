@@ -18,9 +18,13 @@ async function main() {
   ch.bindQueue(queue, userExchange, "users.created");
   ch.bindQueue(queue, reviewExchange, "reviews.created");
 
-  ch.consume(queue, (msg) => {
-    console.log(" [x] %s", msg.content.toString());
-  });
+  ch.consume(
+    queue,
+    (msg) => {
+      console.log(" [x] %s", msg.content.toString());
+    },
+    { noAck: true }
+  );
 }
 
 main().catch(console.error);
